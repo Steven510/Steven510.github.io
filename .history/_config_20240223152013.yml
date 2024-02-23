@@ -189,15 +189,6 @@ collections:
   talks:
     output: true
     permalink: /:collection/:path/
-  Econ:
-    output: true
-    permalink: /:collection/:path/
-  Quan:
-    output: true
-    permalink: /:collection/:path/
-  Python:
-    output: true
-    permalink: /:collection/:path/
 
 
 # Defaults

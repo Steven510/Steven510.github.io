@@ -189,15 +189,6 @@ collections:
   talks:
     output: true
     permalink: /:collection/:path/
-  Econ:
-    output: true
-    permalink: /:collection/:path/
-  Quan:
-    output: true
-    permalink: /:collection/:path/
-  Python:
-    output: true
-    permalink: /:collection/:path/
 
 
 # Defaults
@@ -220,37 +211,10 @@ defaults:
     values:
       layout: single
       author_profile: true
-  # # _teaching
-  # - scope:
-  #     path: ""
-  #     type: teaching
-  #   values:
-  #     layout: single
-  #     author_profile: true
-  #     share: true
-  #     comments: true
-  # _Econ
+  # _teaching
   - scope:
       path: ""
-      type: Econ
-    values:
-      layout: single
-      author_profile: true
-      share: true
-      comments: true
-  # _Quan
-  - scope:
-      path: ""
-      type: Quan
-    values:
-      layout: single
-      author_profile: true
-      share: true
-      comments: true
-  # _Python
-  - scope:
-      path: ""
-      type: Python
+      type: teaching
     values:
       layout: single
       author_profile: true
@@ -265,23 +229,23 @@ defaults:
       author_profile: true
       share: true
       comments: true
-  # # _portfolio
-  # - scope:
-  #     path: ""
-  #     type: portfolio
-  #   values:
-  #     layout: single
-  #     author_profile: true
-  #     share: true
-  #     comment: true
-  # # _talks
-  # - scope:
-  #     path: ""
-  #     type: talks
-  #   values:
-  #     layout: talk
-  #     author_profile: true
-  #     share: true
+  # _portfolio
+  - scope:
+      path: ""
+      type: portfolio
+    values:
+      layout: single
+      author_profile: true
+      share: true
+      comment: true
+  # _talks
+  - scope:
+      path: ""
+      type: talks
+    values:
+      layout: talk
+      author_profile: true
+      share: true
 
 # Sass/SCSS
 sass:
