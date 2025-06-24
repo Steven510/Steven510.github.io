@@ -1,7 +1,7 @@
 # main links links
 main:
-  - title: "CV"
-    url: /cv/
+  # - title: "CV"
+  #   url: /cv/
 
   - title: "Blog"
     url: /year-archive/
@@ -9,8 +9,8 @@ main:
   - title: "Econ"
     url: /Econ/  
   
-  - title: "Quan"
-    url: /Quan/  
+  # - title: "Quan"
+  #   url: /Quan/  
   
   - title: "Python"
     url: /Python/

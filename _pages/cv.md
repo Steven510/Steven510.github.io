@@ -33,7 +33,7 @@ Skills
 ======
 * Python
 * Stata
-* R Language
+* R
 * LaTeX
 * Jekyll
 
