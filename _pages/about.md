@@ -17,12 +17,12 @@ redirect_from:
 </p>
 ------
 
-
 ## Education
 
 - **Ph.D. in Mathematical Economics and Finance**  
   *Wuhan University*, 2022 – 2026 (expected)  
-  **Supervisor:** [Cheng Liu](https://ems.whu.edu.cn/info/1706/24625.htm)
+  **Supervisor:** [Cheng Liu](https://ems.whu.edu.cn/info/1706/24625.htm)  
+  *Research focus: Financial Econometrics, Network Science*
 
 - **M.S. in Econometrics and Quantitative Economics**  
   *University of Wisconsin–Madison*, 2020 – 2022
@@ -36,37 +36,30 @@ redirect_from:
 - **Exchange Student in Business Administration**  
   *Universitat Pompeu Fabra*, 2018
 
-
 ## Research Interests
 
-Mathematical Economics and Finance
-
+Mathematical Economics and Finance  
 Specializing in Financial Risk, High-frequency Data, Network Regression, Community Detection
 
-<!-- Work experience
-======
-* Summer 2015: Research Assistant
-  * Github University
-  * Duties included: Tagging issues
-  * Supervisor: Professor Git
+## Publications
 
-* Fall 2015: Research Assistant
-  * Github University
-  * Duties included: Merging pull requests
-  * Supervisor: Professor Hub -->
-  
+- **He, Sixuan**, and Cheng Liu. 2026. “High-dimensional Multivariate Realized Volatility Forecasting with Community Network Structure.” *Journal of Business & Economic Statistics*.  
+  DOI: [10.1080/07350015.2026.2632810](https://doi.org/10.1080/07350015.2026.2632810)
+
+## Working Papers
+
+- **He, Sixuan**, and Cheng Liu. 2025. “High-Dimensional Realized Tail Risk Forecasting Based on Tail-Event Driven Networks.” January 2025 – September 2025.
+- **He, Sixuan**, and Cheng Liu. 2023. “The Propagation Path of Jump Risk in the Stock Market.” September 2022 – June 2023.
+
+## Teaching Experience
+
+- **Wuhan University**, Teaching Assistant  
+  - *Intermediate Econometrics* (Fall 2023)
+  - *Advanced Macroeconomics* (Spring 2024)
+
 ## Skills
 
-Specializing in Python and LaTeX
-
-Familiar with Stata, R, and Jekyll
-
-<!-- * Sub-skill 2.1
-  * Sub-skill 2.2
-  * Sub-skill 2.3 -->
-
-<!-- Publications
-======
-  <ul>{% for post in site.publications %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul> -->
+- **Programming:** Python, R, Stata, MATLAB, SQL, LaTeX  
+- **Python Libraries:** NumPy, Pandas, Matplotlib, Scikit-learn  
+- **Tools:** Git, EViews, MS Office, Jekyll, OpenClaw  
+- **Familiar with:** Stata, R, Jekyll

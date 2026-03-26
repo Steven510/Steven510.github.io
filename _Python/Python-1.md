@@ -5,36 +5,29 @@ permalink: /Python/Python-1/
 date: 2024-03-16
 ---
 
-This article introduces the basic packages we use to analyze data, Numpy, Pandas, SciPy and Matplotlib.
+This article introduces the fundamental packages for data analysis in Python: NumPy, Pandas, SciPy, and Matplotlib.
 
-## [Numpy: the cornerstone of data analysis](https://numpy.org/)
-As data analysts, we work by **Numpy** almost every day. 
-It is the fundamental package for scientific computing in Python.
-Generally speaking, an object of a 2-D or 3-D matrix is enough for us to handle all the problems we face.
-So, after importing the original data, I always deal with it under the type of ndarray.
+## [NumPy: the cornerstone of data analysis](https://numpy.org/)
+As data analysts, we work with **NumPy** almost every day. It is the fundamental package for scientific computing in Python. Generally speaking, a 2‑D or 3‑D array is sufficient to handle most of the problems we encounter. Therefore, after importing raw data, I typically work with it as an ndarray.
 
-The key adventage of using ndarray in Python is the computing speed.
-In original Python, built-in data structures can be divided into four types: 
-- three mutable data structures: **List**, **Dictionary**, and **Set**
-- one immutable data structure: **Tuple**
+The key advantage of using ndarray in Python is computational speed. In base Python, built‑in data structures fall into four categories: 
+- three mutable types: **List**, **Dictionary**, and **Set**
+- one immutable type: **Tuple**
 
-Compared to **List**, the following are the main reasons behind the fast speed of **Numpy**, which I think as a good answer from Ferferite on stackoverflow.[[Reference]](https://stackoverflow.com/questions/63409324/why-numpy-array-is-faster-than-list-in-python)
-- A ndarray is a collection of similar data types that are densely packed in memory. A Python list can have different data types, which puts lots of extra constraints while doing computation on it.
-- **Numpy** is able to divide a task into multiple subtasks and process them parallelly.
-- **Numpy** functions are implemented in C. Which again makes it faster compared to Python Lists.
+Compared to **List**, the following are the main reasons behind the speed of **NumPy** (based on a helpful StackOverflow answer by Ferferite):[[Reference]](https://stackoverflow.com/questions/63409324/why-numpy-array-is-faster-than-list-in-python)
+- An ndarray stores elements of the same data type in a densely packed memory layout. A Python list may contain mixed data types, imposing additional constraints during computation.
+- **NumPy** can split a task into multiple subtasks and process them in parallel.
+- **NumPy** functions are implemented in C, which makes them faster than operations on Python lists.
 
-So if you have speed issue of data analysis in Python, please try to solve it with **Numpy**.
+If you encounter speed issues in Python‑based data analysis, consider leveraging **NumPy**.
 
-In this library, you should remember that the basic element always a multidimensional array object or various derived objects (such as masked arrays and matrices).
-Also, **Numpy** provides an assortment of routines for fast operations on arrays, including mathematical, logical, shape manipulation, sorting, selecting, I/O, discrete Fourier transforms, basic linear algebra, basic statistical operations, random simulation and much more.
+In this library, the core element is always a multidimensional array object (or derived objects such as masked arrays and matrices). **NumPy** also provides a wide range of routines for fast array operations, including mathematical, logical, shape manipulation, sorting, selecting, I/O, discrete Fourier transforms, basic linear algebra, statistical operations, random simulation, and more.
 
-Believe it or not, after you've tried to solve the data problem with **Numpy** once, the only question next time will be how to translate the data analysis problems into ndarray operations. Please check the official reference for your needs. [[Official Reference]](https://numpy.org/doc/stable/reference.html) 
+Believe it or not, once you have solved a data problem with **NumPy**, the only remaining challenge next time will be how to translate your analysis into ndarray operations. Please refer to the official documentation for detailed guidance. [[Official Reference]](https://numpy.org/doc/stable/reference.html) 
 
 ## [Pandas: specialist for data analysis and manipulation](https://pandas.pydata.org/)
-**Pandas** is a fast, powerful, flexible and easy to use open source data analysis and manipulation tool,
-built on top of the Python programming language.
+**Pandas** is a fast, powerful, flexible, and easy‑to‑use open‑source data analysis and manipulation tool, built on top of the Python programming language.
 
-You can find all the same operations for data analysis as **R** and **Stata**.
-Without considering big data or computing speed, I prefer to use **Pandas** as a Python version of Excel because it's convenient and allows the use of SQL statements. [[**pandasql**]](https://pypi.org/project/pandasql/)
+You can perform all the same data analysis operations as in **R** and **Stata**. When dealing with moderately sized datasets and not requiring extreme speed, I often use **Pandas** as a Pythonic version of Excel—it is convenient and even allows you to write SQL‑style queries via the **pandasql** package. [[**pandasql**]](https://pypi.org/project/pandasql/)
 
-Please check the official reference for your needs. [[Official Reference]](https://pandas.pydata.org/docs/reference/index.html) 
+For further details, consult the official documentation. [[Official Reference]](https://pandas.pydata.org/docs/reference/index.html) 

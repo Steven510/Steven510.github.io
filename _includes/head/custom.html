@@ -36,4 +36,78 @@
 </script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
 
+<!-- 复制代码块功能：引入 Clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
+<style>
+  .copy-code-btn {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    z-index: 10;
+  }
+  .copy-code-btn:hover {
+    background: rgba(0,0,0,0.8);
+  }
+  .copy-code-btn:active {
+    background: #28a745;
+  }
+    /* 新增：调整代码块字体大小 */
+  pre code {
+    font-size: 14px;    /* 根据需要修改 */
+  }
+
+  div.highlighter-rouge:before,
+  figure.highlight:before {
+  display: none !important;
+  content: none !important;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var codeBlocks = document.querySelectorAll('pre code');
+    
+    codeBlocks.forEach(function(codeBlock) {
+      var pre = codeBlock.parentNode;
+      if (pre.querySelector('.copy-code-btn')) return;
+      
+      var button = document.createElement('button');
+      button.className = 'copy-code-btn';
+      button.textContent = 'Copy';          // 英文按钮文字
+      pre.style.position = 'relative';
+      pre.appendChild(button);
+      
+      var clipboard = new ClipboardJS(button, {
+        target: function() {
+          return codeBlock;
+        }
+      });
+      
+      clipboard.on('success', function(e) {
+        button.textContent = 'Copied!';     // 成功提示英文
+        setTimeout(function() {
+          button.textContent = 'Copy';
+        }, 2000);
+        e.clearSelection();
+      });
+      
+      clipboard.on('error', function(e) {
+        button.textContent = 'Failed';      // 失败提示英文
+        setTimeout(function() {
+          button.textContent = 'Copy';
+        }, 2000);
+      });
+    });
+  });
+</script>
+
 <!-- end custom head snippets -->
