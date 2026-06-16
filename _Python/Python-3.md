@@ -1,0 +1,268 @@
+---
+title: "BERTopic: Neural Topic Modeling for Modern Text Analysis"
+collection: Python
+permalink: /Python/Python-3/
+date: 2026-03-15
+---
+
+This article introduces BERTopic, a state-of-the-art neural topic modeling technique that leverages transformer-based embeddings and density-based clustering to discover meaningful topics from text corpora.
+
+## What is BERTopic?
+
+**BERTopic** is a topic modeling technique that builds upon BERT embeddings and class-based TF-IDF to create dense clusters that allow for easily interpretable topics. Unlike traditional methods such as LDA (Latent Dirichlet Allocation), BERTopic captures semantic relationships between words and requires no manual specification of the number of topics.
+
+The key innovation of BERTopic lies in its **modular architecture**, which consists of four main stages:
+
+- **Document Embedding**: Converting text into dense vector representations
+- **Dimensionality Reduction**: Projecting high-dimensional embeddings to lower dimensions
+- **Clustering**: Grouping similar documents based on their spatial proximity
+- **Topic Representation**: Extracting meaningful keywords for each cluster
+
+## Why BERTopic over Traditional Methods?
+
+| Aspect | LDA (Traditional) | BERTopic (Neural) |
+|:-------|:------------------|:------------------|
+| Semantic understanding | Bag-of-words, no word order | Contextual embeddings capture meaning |
+| Number of topics | Must be specified in advance | Automatically determined by density |
+| Short text performance | Poor | Excellent |
+| Outlier handling | Forced into topics | Natural noise detection (-1 cluster) |
+| Multilingual support | Requires separate models | Single model works across languages |
+
+## The Four-Stage Architecture
+
+### Stage 1: Document Embedding
+
+The process begins by transforming each document into a dense vector representation using **Sentence-BERT (SBERT)**. Unlike traditional word embeddings (e.g., Word2Vec, GloVe) that produce fixed representations, SBERT generates context-aware embeddings that understand semantic relationships.
+
+    from sentence_transformers import SentenceTransformer
+
+    # Load a pre-trained sentence transformer model
+    model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
+
+    # Documents are converted to 384-dimensional vectors
+    embeddings = model.encode(["AI transforms industries", "Machine learning advances"])
+
+The advantage of this approach is that semantically similar documents end up closer together in the vector space, even when they share no common keywords.
+
+### Stage 2: Dimensionality Reduction
+
+The high-dimensional embeddings (typically 384–768 dimensions) are reduced to a lower-dimensional space using **UMAP (Uniform Manifold Approximation and Projection)**.
+
+UMAP preserves both local and global structure better than PCA or t-SNE, making it particularly suitable for topic modeling. The key parameters include:
+
+| Parameter | Description | Typical Value | Effect |
+|:----------|:------------|:--------------|:-------|
+| `n_neighbors` | Local neighborhood size | 10–30 | Lower = finer clusters, higher = broader clusters |
+| `n_components` | Target dimensions | 5–15 | Higher preserves more detail, slower computation |
+| `min_dist` | Minimum inter-point distance | 0.0–0.5 | Lower = tighter clusters, higher = more spread |
+| `metric` | Distance metric | 'cosine' or 'euclidean' | Cosine works well for high-dimensional text |
+
+The dimensionality reduction step is crucial because:
+- It mitigates the **curse of dimensionality**
+- It speeds up subsequent clustering operations
+- It makes the underlying cluster structure more apparent
+
+### Stage 3: Clustering
+
+After dimensionality reduction, **HDBSCAN (Hierarchical Density-Based Spatial Clustering of Applications with Noise)** identifies clusters of similar documents.
+
+HDBSCAN is a density-based algorithm that offers several advantages over k-means:
+
+- **No need to specify k**: The algorithm automatically determines the number of clusters
+- **Noise detection**: Documents that don't belong to any cluster are labeled as -1 (outliers)
+- **Variable density handling**: Can find clusters of different densities
+- **Hierarchical structure**: Provides a cluster hierarchy for fine-grained analysis
+
+Key HDBSCAN parameters:
+
+| Parameter | Description | Typical Value | Effect |
+|:----------|:------------|:--------------|:-------|
+| `min_cluster_size` | Minimum documents per cluster | 5–20 | Larger = fewer, broader topics |
+| `min_samples` | Points required for core point | 1–10 | Higher = more conservative clustering |
+| `metric` | Distance metric | 'euclidean' | Must match UMAP's output space |
+| `cluster_selection_method` | Algorithm variant | 'eom' (excess of mass) | 'eom' gives balanced clusters |
+
+The -1 label (outliers) is a feature, not a bug. These are documents that don't fit cleanly into any theme and can be processed separately.
+
+### Stage 4: Topic Representation
+
+This stage answers the question: *What does each cluster represent?* BERTopic uses **c-TF-IDF (class-based Term Frequency-Inverse Document Frequency)** to extract the most distinctive words for each topic.
+
+The c-TF-IDF formula:
+
+$$W_{c,x} = tf_{c,x} \times \log\left(1 + \frac{A}{f_x}\right)$$
+
+Where:
+- $W_{c,x}$ = importance of word $x$ for class (topic) $c$
+- $tf_{c,x}$ = frequency of word $x$ in class $c$
+- $A$ = average word frequency across all classes
+- $f_x$ = number of classes containing word $x$
+
+Unlike traditional TF-IDF which operates on individual documents, c-TF-IDF treats each cluster as a single "document," making it ideal for topic extraction.
+
+The output for a typical topic might look like:
+- Topic 0: `machine learning` `neural network` `deep learning` `model training`
+- Topic 1: `climate change` `carbon emission` `renewable energy` `sustainability`
+
+## Key Parameters in Practice
+
+When implementing BERTopic, these parameters most significantly affect results:
+
+### Embedding Parameters
+
+    from bertopic import BERTopic
+    from sentence_transformers import SentenceTransformer
+
+    # Choice of embedding model critically impacts results
+    # For English: 'all-MiniLM-L6-v2' (fast, 384-dim)
+    # For multilingual: 'paraphrase-multilingual-MiniLM-L12-v2'
+    # For high accuracy: 'all-mpnet-base-v2' (slower, 768-dim)
+
+    embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+
+### UMAP Parameters
+
+    from umap import UMAP
+
+    umap_model = UMAP(
+        n_neighbors=15,      # Small=detailed, Large=general
+        n_components=5,      # Trade-off between speed and structure
+        min_dist=0.0,        # Tight clusters recommended
+        metric='cosine',     # Standard for text embeddings
+        random_state=42      # Reproducibility
+    )
+
+### HDBSCAN Parameters
+
+    from hdbscan import HDBSCAN
+
+    hdbscan_model = HDBSCAN(
+        min_cluster_size=10,  # Minimum documents per topic
+        min_samples=5,        # Conservative outlier detection
+        metric='euclidean',   # UMAP outputs Euclidean space
+        cluster_selection_method='eom'
+    )
+
+### c-TF-IDF Parameters
+
+    from sklearn.feature_extraction.text import CountVectorizer
+
+    vectorizer_model = CountVectorizer(
+        min_df=2,        # Word appears in at least 2 documents
+        max_df=0.85,     # Ignore words appearing in >85% of docs
+        ngram_range=(1, 2)  # Unigrams and bigrams
+    )
+
+## Basic Usage Example
+
+Here's a complete minimal example:
+
+    from bertopic import BERTopic
+    from sklearn.datasets import fetch_20newsgroups
+
+    # Load sample data
+    docs = fetch_20newsgroups(subset='all', remove=('headers', 'footers', 'quotes'))['data']
+
+    # Initialize and train model
+    topic_model = BERTopic(verbose=True)
+    topics, probabilities = topic_model.fit_transform(docs)
+
+    # Explore results
+    topic_info = topic_model.get_topic_info()
+    print(topic_info.head())
+
+    # Get keywords for a specific topic
+    topic_model.get_topic(0)  # Returns list of (word, c-TF-IDF score) pairs
+
+    # Reduce number of topics (aggregate similar ones)
+    new_topics = topic_model.reduce_topics(docs, nr_topics=30)
+
+    # Visualize topics
+    topic_model.visualize_topics().show()
+
+## Handling Common Challenges
+
+### Challenge 1: Too Many Topics
+
+When HDBSCAN produces excessive fine-grained topics:
+
+    # Reduce to a target number
+    new_topics = topic_model.reduce_topics(documents, nr_topics=30)
+
+    # Or automatically find optimal number
+    new_topics = topic_model.reduce_topics(documents, nr_topics='auto')
+
+### Challenge 2: Uninterpretable Keywords
+
+When c-TF-IDF produces generic or repetitive keywords:
+
+    from bertopic.representation import MaximalMarginalRelevance
+
+    # MMR balances relevance and diversity
+    mmr_model = MaximalMarginalRelevance(diversity=0.7)
+    topic_model.update_topics(documents, representation_model=mmr_model)
+
+### Challenge 3: Many Outliers (-1 labels)
+
+When too many documents are marked as noise:
+
+    # Reassign outliers using c-TF-IDF
+    new_topics = topic_model.reduce_outliers(
+        documents, 
+        topics, 
+        strategy="c-tf-idf"
+    )
+
+## Visualization Tools
+
+BERTopic provides several built-in visualization functions:
+
+| Function | Visualization Type | Purpose |
+|:---------|:-------------------|:--------|
+| `visualize_topics()` | Interactive bubble chart | Topic similarity and size overview |
+| `visualize_hierarchy()` | Dendrogram | Hierarchical topic relationships |
+| `visualize_documents()` | 2D scatter plot | Document distribution in reduced space |
+| `visualize_barchart()` | Horizontal bar chart | Top n words per topic |
+| `visualize_heatmap()` | Similarity matrix | Topic-topic similarity patterns |
+| `visualize_term_rank()` | Term rank plot | Word importance distribution |
+
+For time-series analysis:
+
+    # Track topics over time
+    topics_over_time = topic_model.topics_over_time(
+        documents, 
+        timestamps,  # List of dates/times
+        nr_bins=20   # Number of time intervals
+    )
+    topic_model.visualize_topics_over_time(topics_over_time).show()
+
+## Strengths and Limitations
+
+### Strengths
+
+- **Excellent semantic understanding**: Captures meaning beyond keywords
+- **Automatic topic discovery**: No need to pre-specify topic count
+- **Robust to noise**: Naturally handles outliers with -1 label
+- **Supports short text**: Performs well on social media, titles, abstracts
+- **Multilingual**: Single model handles multiple languages
+- **Modular and extensible**: Each stage can be customized
+
+### Limitations
+
+- **Computational cost**: Requires more resources than LDA
+- **Large data requirements**: Needs sufficient data for meaningful embeddings
+- **Black box aspects**: Some clustering decisions are hard to explain
+- **Long document challenges**: Documents exceeding 512 tokens need special handling
+- **Determinism issues**: Different runs may produce different clusters (set random_state for reproducibility)
+
+## Conclusion
+
+BERTopic represents a significant advance in topic modeling, replacing bag-of-words assumptions with contextualized semantic understanding. Its modular architecture—combining document embeddings, UMAP dimensionality reduction, HDBSCAN clustering, and c-TF-IDF representation—produces topics that are both semantically coherent and easily interpretable.
+
+For practitioners transitioning from traditional methods, the key adjustments involve:
+1. Understanding that topics emerge from density rather than probability distributions
+2. Accepting that not all documents will be assigned to topics (-1 outliers are valid)
+3. Recognizing that embedding model choice significantly impacts results
+4. Tuning UMAP and HDBSCAN parameters based on corpus size and desired granularity
+
+The library is actively maintained and well-documented. For detailed API references and advanced usage patterns, consult the [official documentation](https://maartengr.github.io/BERTopic/).
